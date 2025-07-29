@@ -3,6 +3,7 @@
 #include "Shlobj_core.h"
 #include "propkey.h"
 #include "startmenuresolver.h"
+#include "OptionConfig.h"
 
 //0000000180751608		SHGetFolderPathEx	api-ms-win-storage-exports-internal-l1-1-0
 CStartMenuItemFilter::CStartMenuItemFilter()
@@ -94,6 +95,28 @@ bool IsMergedFolderGUID(IShellFolder* ShellFolder, LPCITEMIDLIST pidl, REFGUID G
     return bMatches;
 }
 
+// Ittr: Remove excess shortcuts that should not be visible (i.e. fake immersive settings, "Print Dialog", etc)
+bool IsForbiddenShortcut(IShellItem* psi)
+{
+    bool isForbidden = false;
+
+    if (s_ShowStoreAppsInStart) // Only hide these items when store applications in start menu are enabled
+    {
+        LPWSTR lpDisplayName;
+        HRESULT hr = psi->GetDisplayName(SIGDN_PARENTRELATIVEFORADDRESSBAR, &lpDisplayName);
+        if (SUCCEEDED(hr)
+            && ((lstrcmp(lpDisplayName, L"Immersive Control Panel.lnk") == 0)
+                || (lstrcmp(lpDisplayName, L"MiracastView.lnk") == 0)
+                || (lstrcmp(lpDisplayName, L"PrintDialog.lnk") == 0)))
+        {
+            isForbidden = true;
+        }
+        CoTaskMemFree(lpDisplayName);
+    }
+
+    return isForbidden;
+}
+
 HRESULT __stdcall CStartMenuItemFilter::IncludeItem(IShellItem* psi)
 {
     ULONG v11;
@@ -118,7 +141,7 @@ HRESULT __stdcall CStartMenuItemFilter::IncludeItem(IShellItem* psi)
                 }
                 v10->Release();
             }
-            else if (!FilterPidl(v7, pv))
+            else if (!FilterPidl(v7, pv) || IsForbiddenShortcut(psi))
             {
                 v4 = 1;
             }

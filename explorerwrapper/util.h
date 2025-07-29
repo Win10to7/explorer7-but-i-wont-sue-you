@@ -231,7 +231,7 @@ __forceinline WINDOWCOMPOSITIONATTRIBDATA GetTrayAccentProperties(bool isThumbna
 	// - we then define gradient color by pulling either DWM accent color or immersive color as applicable
 	// this is then passed into attribute data which we call back into whenever we need to get accent properties without retyping this whole function
 
-	if (g_osVersion.BuildNumber() >= 22621 && s_ColorizationOptions == 3) // Acrylic colorization misbehaves on 11. Removing 0x2 flag fixes this
+	if (g_osVersion.BuildNumber() >= 21996 && s_ColorizationOptions == 3) // Acrylic colorization misbehaves on 11. Removing 0x2 flag fixes this
 	{
 		WINDOWCOMPOSITIONATTRIBDATA attrData;
 		ACCENT_POLICY accentPolicy;

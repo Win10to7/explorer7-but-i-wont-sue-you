@@ -150,16 +150,27 @@ HICON GetUWPIcon(HWND a2)
 
 PVOID CTaskBandPtr = 0;
 
-VOID SetWindowIcon(PVOID This, HWND a2, HICON a3, int a4)
+VOID CTaskBand_SetWindowIconHook(PVOID This, HWND a2, HICON a3, int a4)
 {
 	CTaskBandPtr = This;
-	if (IsShellFrameWindow && IsShellFrameWindow(a2))
+
+	auto bIsImmersiveWnd = [](HWND hwnd) -> bool
+		{
+			return IsShellFrameWindow && IsShellFrameWindow(hwnd);
+		};
+
+	if (bIsImmersiveWnd(a2))
 	{
-		HICON hc = GetUWPIcon(a2);
-		if (hc) SetIcon(This, a2, hc, a4);
+		HICON icon = GetUWPIcon(a2);
+		if (icon)
+		{
+			CTaskBand_SetWindowIconOrig(This, a2, icon, a4);
+		}
 	}
 	else
-		SetIcon(This, a2, a3, a4);
+	{
+		CTaskBand_SetWindowIconOrig(This, a2, a3, a4);
+	}
 }
 
 VOID UpdateItemIcon(PVOID This, int a2)
@@ -355,7 +366,7 @@ void RenderStoreAppsOnTaskbar()
 
 		if (CTBSWIPattern)
 		{
-			MH_CreateHook(static_cast<LPVOID>(CTBSWIPattern), SetWindowIcon, reinterpret_cast<LPVOID*>(&SetIcon));
+			MH_CreateHook(static_cast<LPVOID>(CTBSWIPattern), CTaskBand_SetWindowIconHook, reinterpret_cast<LPVOID*>(&CTaskBand_SetWindowIconOrig));
 		}
 		else // 7779 and 7785
 		{
@@ -364,7 +375,7 @@ void RenderStoreAppsOnTaskbar()
 
 			if (CTBSWIPattern)
 			{
-				MH_CreateHook(static_cast<LPVOID>(CTBSWIPattern), SetWindowIcon, reinterpret_cast<LPVOID*>(&SetIcon));
+				MH_CreateHook(static_cast<LPVOID>(CTBSWIPattern), CTaskBand_SetWindowIconHook, reinterpret_cast<LPVOID*>(&CTaskBand_SetWindowIconOrig));
 			}
 		}
 

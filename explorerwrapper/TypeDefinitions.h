@@ -40,8 +40,8 @@ static RegisterHotKeyApi RegisterHotKeyApiOrg;
 typedef LONG(WINAPI* GetClassIconCB_t)(PVOID pThis, PVOID a2, int a3);
 static GetClassIconCB_t GetClassIconCB_orig;
 
-typedef LONG(WINAPI* setIcon_t)(PVOID pThis, HWND a2, HICON a3, int a4);
-static setIcon_t SetIcon;
+typedef LONG(WINAPI* CTaskBand_SetWindowIcon_t)(PVOID pThis, HWND a2, HICON a3, int a4);
+static CTaskBand_SetWindowIcon_t CTaskBand_SetWindowIconOrig;
 
 typedef VOID(WINAPI* updateItem_t)(PVOID pThis, int a2);
 static updateItem_t UpdateItem; 

@@ -1,5 +1,5 @@
 <p align=center>
-  <img src="https://github.com/user-attachments/assets/2b8d8d02-85b8-4c7c-a9a0-4d98c4a28138">
+  <img src="https://github.com/user-attachments/assets/77a7d7b1-3022-43ab-9c2a-9a09a923be39">
 </p>
 
 
@@ -25,7 +25,7 @@ explorer7 is a **wrapper library** that allows Windows 7's explorer.exe to run p
 
 </details>
 
-## Known issues (Milestone 2 Update 2, last modified 2025-05-29)
+## Known issues (Milestone 2 Update 3, last modified 2025-07-29)
 These issues, unless specified to have been resolved in a later Windows version, are persistent across subsequent versions of Windows from their introduction.
 
 **MAKE SURE YOU READ THESE FIRST SO YOU ARE AWARE OF WHAT YOU ARE GETTING INTO!**
@@ -39,7 +39,6 @@ These issues, unless specified to have been resolved in a later Windows version,
 - "Notification Area Icon" settings in Control Panel are missing (1507+).
 - The taskbar might overlap fullscreen applications whilst immersive shell is enabled (1507+).
 - If a user has StartIsBack++ installed, it may attempt to erroneously hook the shell, causing both visual and functional issues.
-- "Settings" is duplicated in the start menu program list (1607-22H2, fixed system-wide in Windows 11).
 
 **Windows 11**
 - BlurBehind colorization mode no longer works due to the removal of the relevant accent policy (22H2+).
@@ -72,7 +71,7 @@ For casual users, the **regular installation method** is listed below:
 3. Run Ex7forW8.exe. The installer will ask for Windows 7 files. You can select either option for installation, provided that the installation media is mounted.
 4. You should see the following dialog if the installer succeeded:
    
-   ![image](https://github.com/user-attachments/assets/4772d2b2-e355-4d85-82a5-efe2a1a18539) 
+   ![image](https://github.com/user-attachments/assets/09de37a8-a179-4bac-b15e-ca248e4d96f9)
    
 5. After that, when you wish to switch your shell to the Windows 7 explorer, select the applicable option. You can always change back by running Ex7forW8.exe once again and selecting the "Use Windows 8 explorer" option (this is currently a misnomer, it actually reverts to your system's default shell, which in most cases is the modern explorer executable).
 6. Enjoy!
@@ -130,7 +129,9 @@ By default, explorer.exe will not use the wrapper dll, so you have to change out
 1. Open CFF Explorer, drag explorer.exe into the window
 2. Open the "Import Directory" folder in the left sidebar
 3. Change out the imports for `SHLWAPI.DLL`, `OLE32.DLL` and (if applicable) `EXPLORERFRAME.DLL`:
-![image](https://github.com/user-attachments/assets/6e8acb56-4400-43be-a0c6-0f43ec20480f)
+
+![image](https://github.com/user-attachments/assets/21169181-fa4a-45db-9947-12fffc8ed239)
+
 4. Save the file.
 
 By now, you should be able to start `explorer.exe` from task manager or through other means. 
@@ -148,9 +149,9 @@ These options are located under `HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\Cu
 | OrbDirectory | REG_SZ | Name of the orb images directory to use. This is relative to the installation directory. For example, `"6801"` will use the orb images located at `"explorer7\orbs\6801\"`, `"Orb1\6801"` will use the orbs located at `"explorer7\orbs\Orb1\6801\"`. If this is not specified, the internal explorer image will be used.| **default** |
 | DisableComposition | REG_DWORD | When set to 1, explorer7 will act as if the Desktop Window Manager is not running. | **0** |
 | ClassicTheme | REG_DWORD | When set to 1, explorer7 will use the Windows Classic theme. | **0** |
-| EnableImmersive | REG_DWORD | Controls the ability to run UWP applications in the system. When set to 0, UWP applications will not be able to run. | **0** |
-| StoreAppsInStart | REG_DWORD | When set to 0, UWP applications will be hidden from the All Programs list. | **1** |
-| StoreAppsOnTaskbar | REG_DWORD | When set to 0, specializations applied to load UWP application icons will not be applied. | **0 (when EnableImmersive = 0)**, **1 (when EnableImmersive = 1)** |
+| EnableImmersive | REG_DWORD | Controls the ability to run immersive applications in the system. When set to 0, immersive applications will not be able to run. | **0** |
+| StoreAppsInStart | REG_DWORD | When set to 0, immersive applications will be hidden from the All Programs list. | **1** |
+| StoreAppsOnTaskbar | REG_DWORD | When set to 0, specializations applied to load immersive application icons will not be applied, and pinned immersive applications will be hidden. | **0 (when EnableImmersive = 0)**, **1 (when EnableImmersive = 1)** |
 | ColorizationOptions | REG_DWORD | Controls shell colorization behaviour. Options 1 to 4 may have varying compatibility across Windows versions. | **1** |
 | AcrylicColorization | REG_DWORD | Controls acrylic colorization behaviour. Options 0-2 control the use of immersive colours, option 3 will use the regular colorization. | **0** |
 | OverrideAlpha | REG_DWORD | When set to 1, colorization alpha specified by DWM is overridden on the taskbar, start menu, and thumbnails. | **0** |

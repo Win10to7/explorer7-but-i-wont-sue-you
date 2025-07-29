@@ -91,11 +91,11 @@ void InitializeConfiguration()
 	}
 
 	// Colorization configuration
-	// - Check first if aero is supported - if it is, we use Windows 7's original colorization
+	// - Check first if the user is using a Windows version with buggy colorization (in which case, Acrylic is enforced)
 	// - Otherwise, we use composited colorization option set...
-	if (g_osVersion.BuildNumber() >= 27858) 
+	if (g_osVersion.BuildNumber() >= 27858 && g_osVersion.BuildNumber() < 27891)
 	{
-		// Note: Non-acrylic effects are broken in latest Canary builds, so prevent usage
+		// Note: Non-acrylic effects are broken in some recent Canary builds, so prevent usage
 		s_ColorizationOptions = 3;
 	}
 	else

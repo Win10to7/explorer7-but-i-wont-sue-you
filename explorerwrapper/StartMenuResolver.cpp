@@ -142,6 +142,16 @@ HRESULT STDMETHODCALLTYPE CStartMenuResolver::GetShortcutForProcess(ULONG_PTR p1
 HRESULT STDMETHODCALLTYPE CStartMenuResolver::GetBestShortcutForAppID(DWORD* p1, IUnknown* p2)
 {
 	dbgprintf(L"GetBestShortcutForAppID");
+
+	// Ittr: Basically, immersive applications normally fail when calling this function
+	// Settings will only succeed, because of the existence of the extra shortcut in the start menu folders
+	// This ensures that it fails and is treated like all other immersive applications
+	// A more comprehensive solution will be shipped in Milestone 3
+	if (lstrcmp((LPWSTR)p1, L"windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel") == 0)
+	{
+		return E_OUTOFMEMORY;
+	}
+
 	return m_resolver8->GetBestShortcutForAppID(p1, p2);
 }
 

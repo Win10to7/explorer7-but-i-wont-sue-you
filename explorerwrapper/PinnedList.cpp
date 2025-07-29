@@ -83,11 +83,6 @@ HRESULT __stdcall CPinnedListWrapper::EnumObjects(IEnumFullIDList** p1)
 
 HRESULT __stdcall CPinnedListWrapper::Modify(PCIDLIST_ABSOLUTE p1, PCIDLIST_ABSOLUTE p2)
 {
-	/*if (g_osVersion.BuildNumber() >= 26100)
-	{
-		return m_pinManager->PinItemFromTrustedCaller(p2, PMC_TASKBANDINSERT);
-	}*/
-
 	if (m_pinnedList25)
 		return m_pinnedList25->Modify(p1, p2);
 	if (m_flexList)
@@ -116,20 +111,6 @@ HRESULT __stdcall CPinnedListWrapper::GetPinnableInfo(IDataObject* p1, int p2, I
 		// this is to prevent potential issues arising with people trying to pin despite being in this mode
 		return E_NOINTERFACE;
 	}
-
-	//if (s_ShowStoreAppsOnTaskbar) ----- THIS DOES NOT WORK YET
-	//{
-	//	dbgprintf(L"CPinnedListWrapper::GetPinnableInfo: %p %p %p %p %p %p", p1, p2, p3, p4, p5, p6);
-
-	//	//dbgprintf(L"ISHELLITEM p4 DISPLAYNAME: %p", folderpath);
-
-	//	if (lstrcmp((LPCWSTR)p5, L"Application Frame Host") == 0)
-	//	{
-	//		// set p1 to NULL which is a hack but prevents wrongful "Application Frame Host" entries appearing. 8.0 behaviour for now.
-	//		// TODO: rework this in future
-	//		p1 = NULL;
-	//	}
-	//}
 
 	if (m_pinnedList25)
 		return m_pinnedList25->GetPinnableInfo(p1, p2, p3, p4, p5, p6);
@@ -186,11 +167,27 @@ HRESULT __stdcall CPinnedListWrapper::GetPinnedItem(PCIDLIST_ABSOLUTE p1, PIDLIS
 
 HRESULT __stdcall CPinnedListWrapper::GetAppIDForPinnedItem(PCIDLIST_ABSOLUTE p1, PWSTR* p2)
 {
-	if (!s_UseTaskbarPinning)
+	// Ittr: Determine whether we should hide immersive items
+	bool bHideImmersivePidl = false;
+
+	// Only bother running the filtering code if the option to show store applications on the taskbar is disabled
+	if (!s_ShowStoreAppsOnTaskbar)
+	{
+		ITEMIDLIST_ABSOLUTE* pidlApplicationFolder;
+		if (SUCCEEDED(SHGetKnownFolderIDList(FOLDERID_AppsFolder, KF_FLAG_DONT_VERIFY, nullptr, &pidlApplicationFolder)))
+		{
+			bHideImmersivePidl = ILIsParent(pidlApplicationFolder, p1, TRUE);
+		}
+		CoTaskMemFree(pidlApplicationFolder);
+	}
+
+	// Cause the interface to intentionally fail if pinning is disabled or in the cases where immersive items should be hidden
+	if (!s_UseTaskbarPinning || bHideImmersivePidl)
 	{
 		return E_NOINTERFACE;
 	}
 
+	// Pass through to the appropriate PinnedList interface for the user's version of Windows
 	if (m_pinnedList25)
 		return m_pinnedList25->GetAppIDForPinnedItem(p1, p2);
 	if (m_flexList)
