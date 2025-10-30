@@ -1,23 +1,27 @@
 <p align=center>
-  <img src="https://github.com/user-attachments/assets/77a7d7b1-3022-43ab-9c2a-9a09a923be39">
+  <img src="https://github.com/user-attachments/assets/eea4492b-9637-4f43-9f88-7a5df14d35ef" />
 </p>
 
 
 explorer7 is a **wrapper library** that allows Windows 7's explorer.exe to run properly on modern Windows versions, aiming to resurrect the original Windows 7 shell experience.
 
+
+This fork was made due to repeated GPLv3 violations by the [original repository owner](https://github.com/marp/win10-to-win7-transformation-pack/issues/3) [Archive](https://web.archive.org/web/20251030151550/https://github.com/marp/win10-to-win7-transformation-pack/issues/3) [2](https://files.catbox.moe/oxl8r9.png)
+
+This fork acts as a drop-in replacement for Explorer7. Upstream is treated with minimal trust, therefore commits from upstream and the dependencies owned by ittrgrey are reviewed to avoid supply-chain attacks.
 <details>
   <summary>Screenshots</summary>
 
 <p align=center>
-  <img src="https://github.com/user-attachments/assets/a428c168-b1ca-49cc-aac0-7959cd892cba">
+TBD
   <br>
     <i>The start menu in the default view.</i>
   <br>
-  <img src="https://github.com/user-attachments/assets/edd254ba-1763-415a-b61b-78bd196b1500">
+TBD
   <br>
     <i>The start menu in the programs view.</i>
   <br>
-  <img src="https://github.com/user-attachments/assets/22320c33-6448-44b5-8ff1-2681fad74b25">
+TBD
   <br>
     <i>The taskbar jumplist and tray overflow.</i>
   <br>
@@ -270,6 +274,10 @@ If you're having linker errors because of the prebuilt minhook, do the following
 Contributors: DON'T COMMIT YOUR MODIFIED `libMinHook.x64.lib` UNLESS SPECIFIED!
 
 ## Licensing
-The code for the project is licensed under GPLv3, to allow both for further research and for power-users to be able to make their own modifications. However, in the public interest, for the safety of users and developers alike, inclusion of compiled explorer7 DLL files in any form (whether compiled from source, forks of the source code, or from the release repository) in modified Windows ISOs, or "transformation packs", is strictly prohibited. 
+The code for the project is licensed under GPLv3, to allow both for further research and for power-users to be able to make their own modifications.
 
-We reserve every right to act against unauthorised usage of the software, as outlined above.
+Original Ex7ForW8 Project: [Tihiy](https://msfn.org/board/topic/157302-windows-7-explorer-for-windows-8/)
+
+Explorer.exe/Explorer.exe.mui/Shell32.mui are property of
+
+© 2009 Microsoft Corporation. All rights reserved.
